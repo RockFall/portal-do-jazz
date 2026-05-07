@@ -42,7 +42,7 @@ export default async function AdminEventsPage() {
       </h1>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-        {events.map((event) => {
+        {events.map((event: (typeof events)[number]) => {
           const isPast = event.startsAt < new Date()
           return (
             <div
