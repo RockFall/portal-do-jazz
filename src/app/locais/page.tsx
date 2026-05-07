@@ -2,6 +2,8 @@ import { MapPin } from "lucide-react";
 import db from "@/lib/db";
 import VenueCard from "@/components/VenueCard";
 
+export const dynamic = "force-dynamic";
+
 export default async function LocaisPage() {
   const venues = await db.venue.findMany({
     where: { active: true },
