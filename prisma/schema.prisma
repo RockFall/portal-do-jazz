@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Venue {
+  id           String   @id @default(cuid())
+  name         String
+  address      String
+  neighborhood String
+  latitude     Float?
+  longitude    Float?
+  instagramUrl String?
+  websiteUrl   String?
+  phone        String?
+  active       Boolean  @default(true)
+  events       Event[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Artist {
+  id           String         @id @default(cuid())
+  name         String
+  instagramUrl String?
+  bio          String?
+  genres       String         @default("jazz")
+  events       EventArtist[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+}
+
+model Event {
+  id              String          @id @default(cuid())
+  title           String
+  description     String?
+  startsAt        DateTime
+  endsAt          DateTime?
+  venueId         String
+  venue           Venue           @relation(fields: [venueId], references: [id])
+  priceMin        Float?
+  priceMax        Float?
+  ticketUrl       String?
+  sourceUrl       String?
+  imageUrl        String?
+  confidenceScore Int             @default(100)
+  status          String          @default("published")
+  artists         EventArtist[]
+  evidence        EventEvidence[]
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+}
+
+model EventArtist {
+  eventId   String
+  artistId  String
+  event     Event  @relation(fields: [eventId], references: [id])
+  artist    Artist @relation(fields: [artistId], references: [id])
+  @@id([eventId, artistId])
+}
+
+model EventEvidence {
+  id          String   @id @default(cuid())
+  eventId     String
+  event       Event    @relation(fields: [eventId], references: [id])
+  sourceType  String
+  rawText     String?
+  sourceUrl   String?
+  collectedAt DateTime @default(now())
+}
+
+model Post {
+  id          String   @id @default(cuid())
+  title       String
+  body        String
+  type        String   @default("news")
+  sourceUrl   String?
+  imageUrl    String?
+  publishedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
