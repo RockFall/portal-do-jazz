@@ -20,7 +20,7 @@ const dayColors: Record<string, { strip: string; badge: string; badgeText: strin
     badge: "rgba(201,168,76,0.15)",
     badgeText: "#c9a84c",
   },
-  amanhã: {
+  "amanhã": {
     strip: "linear-gradient(135deg, #a0a0a0, #606060)",
     badge: "rgba(160,160,160,0.12)",
     badgeText: "#b0b0b0",
@@ -48,40 +48,44 @@ export default function EventCard({
   description,
 }: EventCardProps) {
   const label = getDayLabel(startsAt);
-  const colors = dayColors[label];
+  const colors = dayColors[label] ?? dayColors.futuro;
+  const isFree = priceMin === 0 || (!priceMin && !priceMax);
 
   return (
-    <Link href={`/agenda/${id}`} className="block group">
+    <Link
+      href={`/agenda/${id}`}
+      style={{ display: "block", textDecoration: "none" }}
+    >
       <article
+        className="card-hover"
         style={{
           background: "#141414",
           border: "1px solid #2a2a2a",
           borderRadius: "12px",
           overflow: "hidden",
-          transition: "transform 0.2s ease, box-shadow 0.2s ease",
+          height: "100%",
         }}
-        className="card-hover"
       >
         {/* Color strip */}
         <div style={{ height: "3px", background: colors.strip }} />
 
-        <div style={{ padding: "1.25rem" }}>
-          {/* Date badge + time */}
+        <div style={{ padding: "1rem" }}>
+          {/* Date badge + time row */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              marginBottom: "0.75rem",
+              marginBottom: "0.625rem",
             }}
           >
             <span
               style={{
-                fontSize: "0.7rem",
-                fontWeight: 600,
+                fontSize: "0.68rem",
+                fontWeight: 700,
                 textTransform: "uppercase",
-                letterSpacing: "0.08em",
-                padding: "0.25rem 0.6rem",
+                letterSpacing: "0.07em",
+                padding: "0.2rem 0.5rem",
                 borderRadius: "4px",
                 background: colors.badge,
                 color: colors.badgeText,
@@ -93,12 +97,12 @@ export default function EventCard({
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "0.3rem",
-                fontSize: "0.8rem",
-                color: "#888",
+                gap: "0.25rem",
+                fontSize: "0.78rem",
+                color: "#666",
               }}
             >
-              <Clock size={12} />
+              <Clock size={11} />
               {formatTime(startsAt)}
             </span>
           </div>
@@ -107,25 +111,23 @@ export default function EventCard({
           <h3
             style={{
               fontFamily: "'Playfair Display', Georgia, serif",
-              fontSize: "1.05rem",
+              fontSize: "1rem",
               fontWeight: 700,
               color: "#e8e8e8",
               marginBottom: "0.5rem",
               lineHeight: 1.3,
-              transition: "color 0.15s ease",
             }}
-            className="group-hover:text-[#c9a84c]"
           >
             {title}
           </h3>
 
-          {/* Description */}
+          {/* Description — only on larger screens via line clamp */}
           {description && (
             <p
               style={{
-                fontSize: "0.8rem",
+                fontSize: "0.78rem",
                 color: "#666",
-                marginBottom: "0.75rem",
+                marginBottom: "0.625rem",
                 lineHeight: 1.5,
                 display: "-webkit-box",
                 WebkitLineClamp: 2,
@@ -142,33 +144,24 @@ export default function EventCard({
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "0.4rem",
-              marginBottom: "0.5rem",
+              gap: "0.35rem",
+              marginBottom: "0.4rem",
+              flexWrap: "wrap",
             }}
           >
-            <MapPin size={13} color="#c9a84c" />
-            <span style={{ fontSize: "0.82rem", color: "#aaa" }}>
-              {venueName}
-            </span>
-            <span style={{ fontSize: "0.75rem", color: "#555" }}>
-              · {neighborhood}
-            </span>
+            <MapPin size={12} color="#c9a84c" style={{ flexShrink: 0 }} />
+            <span style={{ fontSize: "0.8rem", color: "#aaa" }}>{venueName}</span>
+            <span style={{ fontSize: "0.72rem", color: "#555" }}>· {neighborhood}</span>
           </div>
 
           {/* Price */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "0.4rem",
-            }}
-          >
-            <Ticket size={13} color="#555" />
+          <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
+            <Ticket size={12} color={isFree ? "#4caf50" : "#555"} style={{ flexShrink: 0 }} />
             <span
               style={{
-                fontSize: "0.8rem",
-                color: priceMin === 0 || (!priceMin && !priceMax) ? "#4caf50" : "#aaa",
-                fontWeight: priceMin === 0 || (!priceMin && !priceMax) ? 600 : 400,
+                fontSize: "0.78rem",
+                color: isFree ? "#4caf50" : "#aaa",
+                fontWeight: isFree ? 600 : 400,
               }}
             >
               {formatPrice(priceMin, priceMax)}

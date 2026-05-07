@@ -84,15 +84,15 @@ export default async function AgendaPage({
   };
 
   return (
-    <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "2.5rem 1.5rem" }}>
+    <div className="container-page">
       {/* Header */}
-      <div style={{ marginBottom: "2rem" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.5rem" }}>
+      <div style={{ marginBottom: "1.5rem" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.25rem" }}>
           <Calendar size={18} color="#c9a84c" />
           <h1
             style={{
               fontFamily: "'Playfair Display', Georgia, serif",
-              fontSize: "1.75rem",
+              fontSize: "clamp(1.35rem, 4vw, 1.75rem)",
               fontWeight: 700,
               color: "#e8e8e8",
             }}
@@ -100,36 +100,36 @@ export default async function AgendaPage({
             Agenda de Jazz
           </h1>
         </div>
-        <p style={{ fontSize: "0.875rem", color: "#555" }}>
+        <p style={{ fontSize: "0.82rem", color: "#555" }}>
           {events.length} show{events.length !== 1 ? "s" : ""} encontrado{events.length !== 1 ? "s" : ""}
         </p>
       </div>
 
-      {/* Filters */}
+      {/* Filters — scrollable on mobile */}
       <div
         style={{
           background: "#111",
           border: "1px solid #2a2a2a",
           borderRadius: "12px",
-          padding: "1.25rem",
-          marginBottom: "2rem",
+          padding: "1rem",
+          marginBottom: "1.5rem",
           display: "flex",
           flexWrap: "wrap",
-          gap: "1.25rem",
+          gap: "1rem",
           alignItems: "flex-end",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", color: "#555", fontSize: "0.8rem" }}>
-          <Filter size={14} />
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", color: "#555", fontSize: "0.78rem" }}>
+          <Filter size={13} />
           <span>Filtros</span>
         </div>
 
         {/* Date filter */}
         <div>
-          <label style={{ display: "block", fontSize: "0.7rem", color: "#555", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "0.4rem" }}>
+          <label style={{ display: "block", fontSize: "0.65rem", color: "#555", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "0.35rem" }}>
             Data
           </label>
-          <div style={{ display: "flex", gap: "0.35rem" }}>
+          <div style={{ display: "flex", gap: "0.3rem", flexWrap: "wrap" }}>
             {dateFilters.map(({ key, label }) => {
               const active = sp.data === key;
               return (
@@ -137,13 +137,14 @@ export default async function AgendaPage({
                   key={label}
                   href={buildHref({ data: key })}
                   style={{
-                    padding: "0.35rem 0.75rem",
+                    padding: "0.4rem 0.7rem",
                     borderRadius: "6px",
                     fontSize: "0.78rem",
                     background: active ? "rgba(201,168,76,0.15)" : "#1a1a1a",
                     color: active ? "#c9a84c" : "#666",
                     border: `1px solid ${active ? "rgba(201,168,76,0.3)" : "#2a2a2a"}`,
                     textDecoration: "none",
+                    minHeight: "36px",
                   }}
                 >
                   {label}
@@ -155,7 +156,7 @@ export default async function AgendaPage({
 
         {/* Neighborhood filter */}
         <div>
-          <label style={{ display: "block", fontSize: "0.7rem", color: "#555", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "0.4rem" }}>
+          <label style={{ display: "block", fontSize: "0.65rem", color: "#555", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "0.35rem" }}>
             Bairro
           </label>
           <NeighborhoodSelect
@@ -168,10 +169,10 @@ export default async function AgendaPage({
 
         {/* Price filter */}
         <div>
-          <label style={{ display: "block", fontSize: "0.7rem", color: "#555", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "0.4rem" }}>
+          <label style={{ display: "block", fontSize: "0.65rem", color: "#555", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "0.35rem" }}>
             Preço
           </label>
-          <div style={{ display: "flex", gap: "0.35rem" }}>
+          <div style={{ display: "flex", gap: "0.3rem" }}>
             {[
               { key: undefined, label: "Todos" },
               { key: "gratuito", label: "Gratuito" },
@@ -226,13 +227,7 @@ export default async function AgendaPage({
           </Link>
         </div>
       ) : (
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
-            gap: "1rem",
-          }}
-        >
+        <div className="event-grid">
           {events.map((event) => (
             <EventCard
               key={event.id}

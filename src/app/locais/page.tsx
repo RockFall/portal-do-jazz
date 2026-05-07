@@ -23,14 +23,14 @@ export default async function LocaisPage() {
   }));
 
   return (
-    <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "2.5rem 1.5rem" }}>
-      <div style={{ marginBottom: "2.5rem" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.5rem" }}>
+    <div className="container-page">
+      <div style={{ marginBottom: "1.75rem" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.25rem" }}>
           <MapPin size={18} color="#c9a84c" />
           <h1
             style={{
               fontFamily: "'Playfair Display', Georgia, serif",
-              fontSize: "1.75rem",
+              fontSize: "clamp(1.35rem, 4vw, 1.75rem)",
               fontWeight: 700,
               color: "#e8e8e8",
             }}
@@ -38,7 +38,7 @@ export default async function LocaisPage() {
             Casas de Jazz em BH
           </h1>
         </div>
-        <p style={{ fontSize: "0.875rem", color: "#555" }}>
+        <p style={{ fontSize: "0.82rem", color: "#555" }}>
           {venues.length} local{venues.length !== 1 ? "is" : ""} com programação de jazz
         </p>
       </div>
@@ -71,7 +71,7 @@ export default async function LocaisPage() {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
+                gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 220px), 1fr))",
                 gap: "1rem",
               }}
             >

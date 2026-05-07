@@ -2,8 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Music2, Menu, X } from 'lucide-react'
-import { useState } from 'react'
+import { Music2 } from 'lucide-react'
 
 const navLinks = [
   { href: '/agenda', label: 'Agenda' },
@@ -14,7 +13,6 @@ const navLinks = [
 
 export default function Header() {
   const pathname = usePathname()
-  const [menuOpen, setMenuOpen] = useState(false)
 
   return (
     <header
@@ -22,6 +20,7 @@ export default function Header() {
         background: 'rgba(10,10,10,0.95)',
         borderBottom: '1px solid rgba(201,168,76,0.15)',
         backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
         position: 'sticky',
         top: 0,
         zIndex: 50,
@@ -31,11 +30,11 @@ export default function Header() {
         style={{
           maxWidth: '1280px',
           margin: '0 auto',
-          padding: '0 1.5rem',
+          padding: '0 1rem',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          height: '64px',
+          height: '56px',
         }}
       >
         {/* Logo */}
@@ -44,14 +43,14 @@ export default function Header() {
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '0.625rem',
+            gap: '0.5rem',
             textDecoration: 'none',
           }}
         >
           <div
             style={{
-              width: '36px',
-              height: '36px',
+              width: '32px',
+              height: '32px',
               borderRadius: '50%',
               background: 'linear-gradient(135deg, #c9a84c, #a07830)',
               display: 'flex',
@@ -60,13 +59,13 @@ export default function Header() {
               flexShrink: 0,
             }}
           >
-            <Music2 size={18} color="#0a0a0a" />
+            <Music2 size={16} color="#0a0a0a" />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
             <span
               style={{
                 fontFamily: "'Playfair Display', Georgia, serif",
-                fontSize: '1.25rem',
+                fontSize: '1.1rem',
                 fontWeight: 700,
                 color: '#c9a84c',
                 letterSpacing: '0.02em',
@@ -76,7 +75,7 @@ export default function Header() {
             </span>
             <span
               style={{
-                fontSize: '0.6rem',
+                fontSize: '0.55rem',
                 color: '#888',
                 letterSpacing: '0.1em',
                 textTransform: 'uppercase',
@@ -87,8 +86,8 @@ export default function Header() {
           </div>
         </Link>
 
-        {/* Desktop nav */}
-        <nav style={{ display: 'flex', gap: '0.25rem' }} className="hidden-mobile">
+        {/* Desktop nav — hidden on mobile (BottomNav handles mobile) */}
+        <nav className="hidden md:flex" style={{ gap: '0.25rem' }}>
           {navLinks.map((link) => {
             const active = pathname?.startsWith(link.href)
             return (
@@ -96,7 +95,7 @@ export default function Header() {
                 key={link.href}
                 href={link.href}
                 style={{
-                  padding: '0.5rem 1rem',
+                  padding: '0.5rem 0.875rem',
                   borderRadius: '6px',
                   fontSize: '0.875rem',
                   fontWeight: active ? 600 : 400,
@@ -111,68 +110,7 @@ export default function Header() {
             )
           })}
         </nav>
-
-        {/* Mobile menu button */}
-        <button
-          onClick={() => setMenuOpen(!menuOpen)}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: '#888',
-            cursor: 'pointer',
-            padding: '0.5rem',
-            display: 'none',
-          }}
-          className="show-mobile"
-          aria-label="Menu"
-        >
-          {menuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
       </div>
-
-      {/* Mobile menu */}
-      {menuOpen && (
-        <div
-          style={{
-            background: '#0f0f0f',
-            borderTop: '1px solid #1a1a1a',
-            padding: '1rem 1.5rem',
-          }}
-          className="show-mobile"
-        >
-          {navLinks.map((link) => {
-            const active = pathname?.startsWith(link.href)
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setMenuOpen(false)}
-                style={{
-                  display: 'block',
-                  padding: '0.75rem 0',
-                  borderBottom: '1px solid #1a1a1a',
-                  color: active ? '#c9a84c' : '#888',
-                  textDecoration: 'none',
-                  fontSize: '1rem',
-                  fontWeight: active ? 600 : 400,
-                }}
-              >
-                {link.label}
-              </Link>
-            )
-          })}
-        </div>
-      )}
-
-      <style>{`
-        @media (max-width: 768px) {
-          .hidden-mobile { display: none !important; }
-          .show-mobile { display: block !important; }
-        }
-        @media (min-width: 769px) {
-          .show-mobile { display: none !important; }
-        }
-      `}</style>
     </header>
   )
 }

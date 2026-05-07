@@ -3,13 +3,18 @@
 :root {
   --bg: #0a0a0a;
   --bg-card: #141414;
-  --bg-card-hover: #1a1a1a;
   --gold: #c9a84c;
   --gold-light: #e0c06a;
   --text: #e8e8e8;
   --text-muted: #888888;
   --border: #2a2a2a;
   --border-subtle: #1e1e1e;
+
+  /* Safe area support for notch/home bar */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
 }
 
 @theme inline {
@@ -17,23 +22,64 @@
   --color-foreground: var(--text);
 }
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 html {
   background-color: var(--bg);
   color: var(--text);
   font-family: var(--font-inter), system-ui, sans-serif;
+  /* Prevent font size inflation on iOS rotation */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
   background-color: var(--bg);
   color: var(--text);
   min-height: 100vh;
+  /* Support iPhone home bar */
+  padding-bottom: var(--safe-bottom);
 }
 
-/* Jazz decorative line */
+/* ── Touch targets: minimum 44×44px ─────────────────────── */
+a,
+button {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Override for elements that should be inline */
+p a,
+td a {
+  min-height: unset;
+  display: inline;
+}
+
+/* ── Card hover effect (desktop only) ───────────────────── */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* ── Active press feedback for touch ─────────────────────── */
+.card-hover:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+/* ── Jazz decorative line ────────────────────────────────── */
 .staff-line {
   background: repeating-linear-gradient(
     to bottom,
@@ -44,7 +90,7 @@ body {
   );
 }
 
-/* Gold gradient text */
+/* ── Gold gradient text ──────────────────────────────────── */
 .text-gold-gradient {
   background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
   -webkit-background-clip: text;
@@ -52,45 +98,96 @@ body {
   background-clip: text;
 }
 
-/* Card hover effect */
-.card-hover {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.card-hover:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
-}
-
-/* Vinyl decorative circle */
-.vinyl-circle::before {
-  content: '';
-  position: absolute;
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  border: 1px solid rgba(201, 168, 76, 0.1);
-  top: -60px;
-  right: -60px;
-  pointer-events: none;
-}
-.vinyl-circle::after {
-  content: '';
-  position: absolute;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  border: 1px solid rgba(201, 168, 76, 0.06);
-  top: -20px;
-  right: -20px;
-  pointer-events: none;
+/* ── Scrollbar (desktop) ─────────────────────────────────── */
+@media (hover: hover) {
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
 }
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+/* ── Responsive container helper ─────────────────────────── */
+.container-page {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1.25rem 1rem;
+}
 
-/* Smooth transitions */
+@media (min-width: 640px) {
+  .container-page {
+    padding: 2rem 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-page {
+    padding: 2.5rem 1.5rem;
+  }
+}
+
+/* ── Responsive event grid ───────────────────────────────── */
+.event-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.875rem;
+}
+
+@media (min-width: 480px) {
+  .event-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .event-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .event-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ── Responsive post/venue grid ─────────────────────────── */
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .content-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .content-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ── Bottom nav safe area ────────────────────────────────── */
+.bottom-nav {
+  padding-bottom: max(0.75rem, var(--safe-bottom));
+}
+
+/* ── Prevent double-tap zoom on buttons/links ────────────── */
+button,
+a {
+  touch-action: manipulation;
+}
+
+/* ── Smooth transitions ──────────────────────────────────── */
 a { transition: color 0.15s ease; }
 button { transition: all 0.15s ease; }
+
+/* ── Input focus rings ───────────────────────────────────── */
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}

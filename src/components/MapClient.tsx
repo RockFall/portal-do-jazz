@@ -50,7 +50,7 @@ export default function MapClient({ venues }: MapClientProps) {
   const center: [number, number] = [-19.917, -43.934];
 
   return (
-    <div style={{ height: "600px", borderRadius: "12px", overflow: "hidden", border: "1px solid #2a2a2a" }}>
+    <div style={{ height: "clamp(300px, 55vh, 600px)", borderRadius: "12px", overflow: "hidden", border: "1px solid #2a2a2a" }}>
       <MapContainer
         center={center}
         zoom={13}
