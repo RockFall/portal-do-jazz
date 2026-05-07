@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Calendar, Filter } from "lucide-react";
 import db from "@/lib/db";
 import EventCard from "@/components/EventCard";
+import NeighborhoodSelect from "@/components/NeighborhoodSelect";
 import { addDays, startOfDay } from "date-fns";
 
 async function getEvents(params: {
@@ -157,30 +158,12 @@ export default async function AgendaPage({
           <label style={{ display: "block", fontSize: "0.7rem", color: "#555", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "0.4rem" }}>
             Bairro
           </label>
-          <select
-            defaultValue={sp.neighborhood ?? ""}
-            onChange={(e) => {
-              if (typeof window !== "undefined") {
-                const v = e.target.value;
-                window.location.href = buildHref({ neighborhood: v || undefined });
-              }
-            }}
-            style={{
-              padding: "0.35rem 0.75rem",
-              borderRadius: "6px",
-              fontSize: "0.78rem",
-              background: "#1a1a1a",
-              color: sp.neighborhood ? "#c9a84c" : "#666",
-              border: `1px solid ${sp.neighborhood ? "rgba(201,168,76,0.3)" : "#2a2a2a"}`,
-              cursor: "pointer",
-              outline: "none",
-            }}
-          >
-            <option value="">Todos os bairros</option>
-            {neighborhoods.map((n) => (
-              <option key={n} value={n}>{n}</option>
-            ))}
-          </select>
+          <NeighborhoodSelect
+            neighborhoods={neighborhoods}
+            current={sp.neighborhood}
+            currentData={sp.data}
+            currentPreco={sp.preco}
+          />
         </div>
 
         {/* Price filter */}

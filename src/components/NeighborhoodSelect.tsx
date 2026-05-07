@@ -3,10 +3,25 @@
 interface Props {
   neighborhoods: string[];
   current?: string;
-  buildHref: (neighborhood: string | undefined) => string;
+  currentData?: string;
+  currentPreco?: string;
 }
 
-export default function NeighborhoodSelect({ neighborhoods, current, buildHref }: Props) {
+export default function NeighborhoodSelect({
+  neighborhoods,
+  current,
+  currentData,
+  currentPreco,
+}: Props) {
+  function buildHref(neighborhood: string | undefined) {
+    const p = new URLSearchParams();
+    if (neighborhood) p.set("neighborhood", neighborhood);
+    if (currentData) p.set("data", currentData);
+    if (currentPreco) p.set("preco", currentPreco);
+    const q = p.toString();
+    return `/agenda${q ? `?${q}` : ""}`;
+  }
+
   return (
     <select
       defaultValue={current ?? ""}
@@ -27,7 +42,9 @@ export default function NeighborhoodSelect({ neighborhoods, current, buildHref }
     >
       <option value="">Todos os bairros</option>
       {neighborhoods.map((n) => (
-        <option key={n} value={n}>{n}</option>
+        <option key={n} value={n}>
+          {n}
+        </option>
       ))}
     </select>
   );
